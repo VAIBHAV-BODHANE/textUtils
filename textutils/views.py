@@ -11,6 +11,7 @@ def analyze(request):
     uppercase = request.POST.get('uppercase', 'off')
     lineremover = request.POST.get('lineremover', 'off')
     spaceremover = request.POST.get('spaceremover', 'off')
+    charcount=request.POST.get('charcount','off')
 
     if removepunc == 'on':
         punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
@@ -44,9 +45,18 @@ def analyze(request):
                 analyzed = analyzed + char
 
         params = {'purpose': 'Removed NewLines', 'analyzed_text': analyzed}
+        textBox = analyzed
+
+    if charcount == 'on':
+        analyzed =0
+        for char in textBox:
+                analyzed +=1  
+            
+        params = {'purpose': 'Character Counter', 'analyzed_text': analyzed}
+    
 
 
-    if ( removepunc != "on" and uppercase != "on" and lineremover != "on" and spaceremover != "on" ):
+    if ( removepunc != "on" and uppercase != "on" and lineremover != "on" and spaceremover != "on" and charcount != "on"):
         return HttpResponse("Please select any operation and try again!")
 
     return render(request, 'analyze.html', params)
